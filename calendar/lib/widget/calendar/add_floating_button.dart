@@ -180,7 +180,8 @@ class _AddFloatingButtonState extends State<AddFloatingButton> {
         income: _status == "지출" ? 0 : int.parse(amountController.text),
         expenditure: _status == "수입" ? 0 : int.parse(amountController.text),
         content: contentController.text,
-        writeday: _selectedDate);
+        writeday: _selectedDate,
+        category: '생활');
 
     await handler.insertCal(addCal);
     return 0;
