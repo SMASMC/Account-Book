@@ -102,7 +102,7 @@ class DatabaseHandler {
     final Database db = await initializeDB();
 
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
-        "select * from calendar where title like ? AND category like ?",
+        "select * from calendar where title like ? AND category like ? order by writeday desc",
         [searchText, searchBtn]); //셀렉트 때문에 ap<String, Object?> toMap()만듬
     return queryResult.map((e) => Calendar.fromMap(e)).toList();
   }
