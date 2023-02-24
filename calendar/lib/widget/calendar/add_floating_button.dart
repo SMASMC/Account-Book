@@ -17,6 +17,7 @@ class AddFloatingButton extends StatefulWidget {
 }
 
 class _AddFloatingButtonState extends State<AddFloatingButton> {
+//
   late DatabaseHandler handler;
 
   late String _selectedDate;
@@ -33,11 +34,14 @@ class _AddFloatingButtonState extends State<AddFloatingButton> {
   final contentController = TextEditingController(); // 메모
   final incomController = TextEditingController(); // 수입
   final expenditureController = TextEditingController(); // 지출
+  final categoryList = ["식비", "교통", "취미", "생활", "의류", "의료", "기타"];
+  late String _selectedList = "식비";
 
   @override
   void initState() {
     super.initState();
     handler = DatabaseHandler(); //생성자
+    _selectedList = categoryList[0];
 
     _selectedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -54,15 +58,20 @@ class _AddFloatingButtonState extends State<AddFloatingButton> {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      elevation: 0,
-      onPressed: () {
-        _showAddEventDialog();
-      },
-      child: const Icon(
-        Icons.add,
-        color: Colors.white,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        FloatingActionButton(
+          elevation: 0,
+          onPressed: () {
+            _showAddEventDialog();
+          },
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 
@@ -98,12 +107,47 @@ class _AddFloatingButtonState extends State<AddFloatingButton> {
                         ),
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text("카테고리 선택 : "),
+                        DropdownButton(
+                          underline: const SizedBox.shrink(),
+                          value: _selectedList,
+                          items: categoryList.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                          onChanged: (dynamic value) {
+                            setState(() {
+                              _selectedList = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "선택된 카테고리 : $_selectedList",
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                     TextField(
+                      maxLength: 10,
                       controller: titleController,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(labelText: "제목"),
                     ),
                     TextField(
+                      maxLength: 9,
                       controller: amountController,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(labelText: "금액"),
@@ -111,6 +155,7 @@ class _AddFloatingButtonState extends State<AddFloatingButton> {
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                     TextField(
+                      maxLength: 10, // 글자수 제한
                       controller: contentController,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(labelText: "메모"),
@@ -181,6 +226,8 @@ class _AddFloatingButtonState extends State<AddFloatingButton> {
         expenditure: _status == "수입" ? 0 : int.parse(amountController.text),
         content: contentController.text,
         writeday: _selectedDate);
+    caterory:
+    _selectedList;
 
     await handler.insertCal(addCal);
     return 0;
