@@ -95,4 +95,15 @@ class DatabaseHandler {
     result = await db.delete("calendar", where: "id = ?", whereArgs: [id]);
     return result;
   }
+
+  // title column으로 검색하는 query
+  Future<List<Calendar>> textSearchList(
+      String? searchText, String? searchBtn) async {
+    final Database db = await initializeDB();
+
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+        "select * from calendar where title like ? AND category like ?",
+        [searchText, searchBtn]); //셀렉트 때문에 ap<String, Object?> toMap()만듬
+    return queryResult.map((e) => Calendar.fromMap(e)).toList();
+  }
 }
