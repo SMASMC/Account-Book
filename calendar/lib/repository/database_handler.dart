@@ -54,6 +54,14 @@ class DatabaseHandler {
     return queryResult.map((e) => Calendar.fromMap(e)).toList();
   }
 
+  Future<List<Calendar>> querySpecificDate(String start, String end) async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+        "select * from calendar where writeday between ? and ? order by writeday desc",
+        [start, end]); //셀렉트 때문에 ap<String, Object?> toMap()만듬
+    return queryResult.map((e) => Calendar.fromMap(e)).toList();
+  }
+
   // 수입, 지출, 합계의 합계
   queryIncom() async {
     final Database db = await initializeDB();
