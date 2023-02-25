@@ -1,5 +1,6 @@
 import 'package:calendar/view/calendar_page1.dart';
 import 'package:calendar/view/calendar_page2.dart';
+import 'package:calendar/view/search.dart';
 import 'package:flutter/material.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -16,7 +17,7 @@ class _CalendarPageState extends State<CalendarPage>
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 2, vsync: this);
+    controller = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -42,6 +43,9 @@ class _CalendarPageState extends State<CalendarPage>
               Tab(
                 text: "일별",
               ),
+              Tab(
+                text: "검색",
+              ),
             ]),
         iconTheme: const IconThemeData(
           color: Colors.black,
@@ -54,6 +58,7 @@ class _CalendarPageState extends State<CalendarPage>
         children: const [
           CalendarPage1(),
           CalendarPage2(),
+          SearchPage(),
         ],
       ),
     );

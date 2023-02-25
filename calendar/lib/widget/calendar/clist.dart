@@ -42,6 +42,7 @@ class _ClistState extends State<Clist> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(), // listView 스크롤 안되게
         itemCount: list.length,
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
