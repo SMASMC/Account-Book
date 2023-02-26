@@ -1,5 +1,6 @@
 import 'package:calendar/repository/database_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SearchListView extends StatefulWidget {
   final Stream<List> stream;
@@ -48,6 +49,7 @@ class _SearchListViewState extends State<SearchListView> {
           return ListView.builder(
               itemCount: snapshot.data?.length,
               itemBuilder: (BuildContext context, int index) {
+                var f = NumberFormat('###,###,###,###');
                 List<String> day = snapshot.data![index].writeday.split('-');
 
                 var date = '${day[0]}년 ${day[1]}월 ${day[2]}일';
@@ -119,8 +121,9 @@ class _SearchListViewState extends State<SearchListView> {
                                 children: [
                                   Text(
                                     snapshot.data![index].income == 0
-                                        ? "-${snapshot.data![index].expenditure}원"
-                                        : "+${snapshot.data![index].income}원",
+                                        // '${f.format(foodListModel.price)}원',
+                                        ? "-${f.format(snapshot.data![index].expenditure)}원"
+                                        : "+${f.format(snapshot.data![index].income)}원",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
