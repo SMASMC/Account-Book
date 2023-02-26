@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:intl/intl.dart';
 
 import '../model/calendar.dart';
 import '../repository/database_handler.dart';
@@ -16,7 +15,6 @@ class CalendarPage2 extends StatefulWidget {
 }
 
 class _CalendarPage2State extends State<CalendarPage2> {
-  var f = NumberFormat('###,###,###,###');
   late DatabaseHandler handler; // DatabaseHandler 클라스로 만들어준 클라스
   late DateTime _dateTime;
   late TextEditingController startController;
@@ -212,15 +210,7 @@ class _CalendarPage2State extends State<CalendarPage2> {
                     backgroundColor: const Color.fromARGB(255, 248, 112, 112),
                   ),
                   onPressed: () {
-                    var mon = DateTime.now().month < 10
-                        ? '0${DateTime.now().month.toString()}'
-                        : DateTime.now().month.toString();
-                    var day = DateTime.now().day < 10
-                        ? '0${DateTime.now().day.toString()}'
-                        : DateTime.now().day.toString();
                     setState(() {
-                      endController.text = '${DateTime.now().year}-$mon-$day';
-                      startController.text = '';
                       calList = handler.querySelectDate();
                     });
                   },
@@ -323,15 +313,38 @@ class _CalendarPage2State extends State<CalendarPage2> {
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        snapshot.data![index].title,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17,
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 28,
+                                          height: 18,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              border: Border.all(
+                                                color: Colors.grey,
+                                              )),
+                                          child: Center(
+                                            child: Text(
+                                              snapshot.data![index].category,
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          snapshot.data![index].title,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -343,8 +356,8 @@ class _CalendarPage2State extends State<CalendarPage2> {
                                     children: [
                                       Text(
                                         snapshot.data![index].income == 0
-                                            ? "-${f.format(snapshot.data![index].expenditure)}원"
-                                            : "+${f.format(snapshot.data![index].income)}원",
+                                            ? "-${snapshot.data![index].expenditure}원"
+                                            : "+${snapshot.data![index].income}원",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -437,15 +450,38 @@ class _CalendarPage2State extends State<CalendarPage2> {
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        snapshot.data![index].title,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17,
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 28,
+                                          height: 18,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              border: Border.all(
+                                                color: Colors.grey,
+                                              )),
+                                          child: Center(
+                                            child: Text(
+                                              snapshot.data![index].category,
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          snapshot.data![index].title,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -453,8 +489,8 @@ class _CalendarPage2State extends State<CalendarPage2> {
                                   padding: const EdgeInsets.all(16.0),
                                   child: Text(
                                     snapshot.data![index].income == 0
-                                        ? "-${f.format(snapshot.data![index].expenditure)}원"
-                                        : "+${f.format(snapshot.data![index].income)}원",
+                                        ? "-${snapshot.data![index].expenditure}원"
+                                        : "+${snapshot.data![index].income}원",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
