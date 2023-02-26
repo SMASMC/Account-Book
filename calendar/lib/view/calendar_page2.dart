@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 import '../model/calendar.dart';
 import '../repository/database_handler.dart';
@@ -15,6 +16,7 @@ class CalendarPage2 extends StatefulWidget {
 }
 
 class _CalendarPage2State extends State<CalendarPage2> {
+  var f = NumberFormat('###,###,###,###');
   late DatabaseHandler handler; // DatabaseHandler 클라스로 만들어준 클라스
   late DateTime _dateTime;
   late TextEditingController startController;
@@ -356,8 +358,8 @@ class _CalendarPage2State extends State<CalendarPage2> {
                                     children: [
                                       Text(
                                         snapshot.data![index].income == 0
-                                            ? "-${snapshot.data![index].expenditure}원"
-                                            : "+${snapshot.data![index].income}원",
+                                            ? "-${f.format(snapshot.data![index].expenditure)}원"
+                                            : "+${f.format(snapshot.data![index].income)}원",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -489,8 +491,8 @@ class _CalendarPage2State extends State<CalendarPage2> {
                                   padding: const EdgeInsets.all(16.0),
                                   child: Text(
                                     snapshot.data![index].income == 0
-                                        ? "-${snapshot.data![index].expenditure}원"
-                                        : "+${snapshot.data![index].income}원",
+                                        ? "-${f.format(snapshot.data![index].expenditure)}원"
+                                        : "+${f.format(snapshot.data![index].income)}원",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
