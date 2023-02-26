@@ -14,7 +14,7 @@ class Clist extends StatefulWidget {
 
 class _ClistState extends State<Clist> {
   // late DatabaseHandler handler; // DatabaseHandler 클라스로 만들어준 클라스
-  var f = NumberFormat.currency(locale: 'ko_KR', symbol: '₩');
+  var f = NumberFormat('###,###,###,###');
   late List<Calendar> list;
 
   @override
@@ -75,12 +75,38 @@ class _ClistState extends State<Clist> {
                             const SizedBox(
                               width: 20,
                             ),
-                            Text(
-                              list[index].title,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                              ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 28,
+                                  height: 18,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                      )),
+                                  child: Center(
+                                    child: Text(
+                                      list[index].category,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  list[index].title,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -93,8 +119,8 @@ class _ClistState extends State<Clist> {
                           children: [
                             Text(
                               list[index].expenditure == 0
-                                  ? "+ ${f.format(list[index].income)}"
-                                  : "- ${f.format(list[index].expenditure)}",
+                                  ? "+ ${f.format(list[index].income)}원"
+                                  : "- ${f.format(list[index].expenditure)}원",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -147,7 +173,7 @@ class _ClistState extends State<Clist> {
                             const SizedBox(
                               width: 20,
                             ),
-                            Column(
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
@@ -169,7 +195,7 @@ class _ClistState extends State<Clist> {
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 5,
+                                  width: 10,
                                 ),
                                 Text(
                                   list[index].title,
@@ -187,8 +213,8 @@ class _ClistState extends State<Clist> {
                         padding: const EdgeInsets.all(16),
                         child: Text(
                           list[index].expenditure == 0
-                              ? "+ ${f.format(list[index].income)}"
-                              : "- ${f.format(list[index].expenditure)}",
+                              ? "+ ${f.format(list[index].income)}원"
+                              : "- ${f.format(list[index].expenditure)}원",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
