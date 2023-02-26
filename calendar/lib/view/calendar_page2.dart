@@ -1,6 +1,7 @@
 import 'package:calendar/model/date_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../model/calendar.dart';
@@ -22,6 +23,17 @@ class _CalendarPage2State extends State<CalendarPage2> {
   late List<String> month;
   late List<String> day;
   late Future<List<Calendar>> calList;
+
+  // 수입 지출 스위치
+  late bool _switch;
+  // 수입 지출
+  late String _status;
+
+  final titleController = TextEditingController(); // 제목
+  final amountController = TextEditingController(); // 금액
+  final contentController = TextEditingController(); // 메모
+  final categoryList = ["식비", "교통", "취미", "생활", "의류", "의료", "기타"];
+  late String _selectedList = "식비";
 
   @override
   void initState() {
@@ -73,6 +85,9 @@ class _CalendarPage2State extends State<CalendarPage2> {
     endController.text = '${year[1]}-${month[1]}-${day[1]}';
 
     calList = handler.querySelectDate();
+
+    _switch = true;
+    _status = "지출";
   }
 
   @override
@@ -212,6 +227,15 @@ class _CalendarPage2State extends State<CalendarPage2> {
           const SizedBox(
             height: 15,
           ),
+          const Text(
+            '수정 삭제 원할 시에 해당 기록을 왼쪽으로 넘겨주세요',
+            style: TextStyle(
+              color: Colors.black45,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
           Expanded(
             child: FutureBuilder(
               future: calList, //데이터베이스 부르는거
@@ -235,7 +259,7 @@ class _CalendarPage2State extends State<CalendarPage2> {
                             children: [
                               SlidableAction(
                                 onPressed: (context) {
-                                  print(1); // 바꿔야 됨
+                                  _showUpdateEventDialog(snapshot.data![index]);
                                 },
                                 backgroundColor:
                                     const Color.fromARGB(255, 94, 131, 251),
@@ -245,7 +269,8 @@ class _CalendarPage2State extends State<CalendarPage2> {
                               ),
                               SlidableAction(
                                 onPressed: (context) {
-                                  print(1); // 바꿔야 됨
+                                  _showDeleteEventDialog(
+                                      snapshot.data![index].id!); // 바꿔야 됨
                                 },
                                 backgroundColor:
                                     const Color.fromARGB(255, 248, 112, 112),
@@ -348,7 +373,7 @@ class _CalendarPage2State extends State<CalendarPage2> {
                             children: [
                               SlidableAction(
                                 onPressed: (context) {
-                                  print(1); // 바꿔야 됨
+                                  _showUpdateEventDialog(snapshot.data![index]);
                                 },
                                 backgroundColor:
                                     const Color.fromARGB(255, 116, 149, 255),
@@ -358,7 +383,8 @@ class _CalendarPage2State extends State<CalendarPage2> {
                               ),
                               SlidableAction(
                                 onPressed: (context) {
-                                  print(1); // 바꿔야 됨
+                                  _showDeleteEventDialog(
+                                      snapshot.data![index].id!); // 바꿔야 됨
                                 },
                                 backgroundColor:
                                     const Color.fromARGB(255, 255, 101, 101),
@@ -641,6 +667,249 @@ class _CalendarPage2State extends State<CalendarPage2> {
               ),
             ],
           ),
+        );
+      },
+    );
+  }
+
+  // function
+  _showUpdateEventDialog(Calendar calendar) async {
+    var id = calendar.id;
+
+    var title = calendar.title;
+    var category = calendar.category;
+    var content = calendar.content;
+
+    var inex = calendar.inex;
+    var income = calendar.income;
+    var expenditure = calendar.expenditure;
+
+    var writeday = calendar.writeday;
+
+    titleController.text = title;
+    amountController.text =
+        inex == '지출' ? expenditure.toString() : income.toString();
+    contentController.text = content;
+
+    setState(() {
+      _status = inex;
+      _switch = inex == '지출' ? true : false;
+      _selectedList = category;
+    });
+
+    await showDialog(
+        barrierDismissible: false, // 바깥영역 터치시 창닫기 x
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              title: const Text(
+                "가계부 입력",
+                textAlign: TextAlign.center,
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(_status),
+                        Switch(
+                          value: _switch,
+                          onChanged: (value) {
+                            setState(() {
+                              _switch = value;
+                              _swichOnOff();
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text("카테고리 선택 : "),
+                        DropdownButton(
+                          underline: const SizedBox.shrink(),
+                          value: _selectedList,
+                          items: categoryList.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                          onChanged: (dynamic value) {
+                            setState(() {
+                              _selectedList = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "선택된 카테고리 : $_selectedList",
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    TextField(
+                      maxLength: 10,
+                      controller: titleController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: const InputDecoration(labelText: "제목"),
+                    ),
+                    TextField(
+                      maxLength: 9,
+                      controller: amountController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: const InputDecoration(labelText: "금액"),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    ),
+                    TextField(
+                      maxLength: 10, // 글자수 제한
+                      controller: contentController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: const InputDecoration(labelText: "메모"),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    titleController.clear();
+                    amountController.clear();
+                    contentController.clear();
+                    Navigator.pop(context);
+                  },
+                  child: const Text("취소"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (titleController.text.isEmpty ||
+                        amountController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("제목과 가격을 모두 입력해 주세요!"),
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } else {
+                      updateCal(Calendar(
+                          id: id,
+                          title: titleController.text,
+                          inex: _status,
+                          income: _status == "지출"
+                              ? 0
+                              : int.parse(amountController.text),
+                          expenditure: _status == "수입"
+                              ? 0
+                              : int.parse(amountController.text),
+                          content: contentController.text,
+                          writeday: writeday,
+                          category: _selectedList));
+
+                      titleController.clear();
+                      amountController.clear();
+                      contentController.clear();
+                      Navigator.pop(context);
+                      return;
+                    }
+                  },
+                  child: const Text("수정"),
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+  _swichOnOff() {
+    if (_switch == true) {
+      setState(() {
+        _status = "지출";
+        _switch = true;
+      });
+    } else {
+      setState(() {
+        _status = "수입";
+        _switch = false;
+      });
+    }
+  }
+
+  // db에 데이터 저장
+  Future<int> updateCal(Calendar calendar) async {
+    Calendar updateCal = Calendar(
+        id: calendar.id,
+        title: calendar.title,
+        inex: calendar.inex,
+        income: calendar.income,
+        expenditure: calendar.expenditure,
+        content: calendar.content,
+        writeday: calendar.writeday,
+        category: calendar.category);
+
+    await handler.updateCal(updateCal);
+    setState(() {
+      calList = handler.querySelectDate();
+    });
+    return 0;
+  }
+
+  _showDeleteEventDialog(int id) {
+    showDialog(
+      barrierDismissible: false, // 바깥영역 터치시 창닫기 x
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            '정말 삭제하시겠습니까?',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                '아니요',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color.fromARGB(255, 255, 123, 123),
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                handler.deleteCal(id);
+                setState(() {
+                  calList = handler.querySelectDate();
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                '예',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color.fromARGB(255, 107, 141, 252),
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

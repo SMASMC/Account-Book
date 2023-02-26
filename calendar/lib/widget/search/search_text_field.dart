@@ -23,7 +23,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
             child: TextField(
               controller: textController,
               decoration: const InputDecoration(
-                labelText: '검색',
+                labelText: '입력한 제목으로 검색',
               ),
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.go,

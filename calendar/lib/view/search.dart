@@ -23,6 +23,9 @@ class _SearchPageState extends State<SearchPage> {
         body: Center(
           child: Column(
             children: [
+              const SizedBox(
+                height: 10,
+              ),
               SizedBox(child: TopButton(controller: controller)),
               SizedBox(child: SearchTextField(controller: controller)),
               Expanded(child: SearchListView(stream: controller.stream)),

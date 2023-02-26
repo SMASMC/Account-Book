@@ -48,6 +48,10 @@ class _SearchListViewState extends State<SearchListView> {
           return ListView.builder(
               itemCount: snapshot.data?.length,
               itemBuilder: (BuildContext context, int index) {
+                List<String> day = snapshot.data![index].writeday.split('-');
+
+                var date = '${day[0]}년 ${day[1]}월 ${day[2]}일';
+
                 return snapshot.data![index].content != ""
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +60,7 @@ class _SearchListViewState extends State<SearchListView> {
                             padding: const EdgeInsets.only(
                                 left: 6, top: 10, bottom: 5),
                             child: Text(
-                              snapshot.data![index].writeday.toString(),
+                              date,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -161,7 +165,7 @@ class _SearchListViewState extends State<SearchListView> {
                             padding: const EdgeInsets.only(
                                 left: 6, top: 10, bottom: 5),
                             child: Text(
-                              snapshot.data![index].writeday.toString(),
+                              date,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
