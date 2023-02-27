@@ -23,6 +23,26 @@ class _TopButtonState extends State<TopButton> {
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
+                  widget.controller.add(['1', '']);
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: const Color(0xffFFB973),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  side: const BorderSide(color: Colors.white),
+                ),
+                elevation: 0.0,
+              ),
+              child: const Text('전체'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(1.0),
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
                   widget.controller.add(['1', '식비']);
                 });
               },

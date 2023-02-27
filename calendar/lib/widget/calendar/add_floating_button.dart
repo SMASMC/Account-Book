@@ -141,13 +141,13 @@ class _AddFloatingButtonState extends State<AddFloatingButton> {
                       ],
                     ),
                     TextField(
-                      maxLength: 10,
+                      maxLength: 8,
                       controller: titleController,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(labelText: "제목"),
                     ),
                     TextField(
-                      maxLength: 9,
+                      maxLength: 8,
                       controller: amountController,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(labelText: "금액"),
@@ -155,7 +155,7 @@ class _AddFloatingButtonState extends State<AddFloatingButton> {
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                     TextField(
-                      maxLength: 10, // 글자수 제한
+                      maxLength: 8, // 글자수 제한
                       controller: contentController,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(labelText: "메모"),

@@ -19,7 +19,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(15.0),
             child: TextField(
               controller: textController,
               decoration: const InputDecoration(

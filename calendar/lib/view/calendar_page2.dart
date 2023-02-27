@@ -252,263 +252,160 @@ class _CalendarPage2State extends State<CalendarPage2> {
                       late Slidable cardWidget;
 
                       // query에서 불러온 결과 중에 내용이 들어있을 경우와 아닐경우에 각각 맞는 card를 만들기 위해서
-                      if (snapshot.data![index].content != "") {
-                        cardWidget = Slidable(
-                          key: ValueKey(index),
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            dismissible: null,
-                            children: [
-                              SlidableAction(
-                                onPressed: (context) {
-                                  _showUpdateEventDialog(snapshot.data![index]);
-                                },
-                                backgroundColor:
-                                    const Color.fromARGB(255, 94, 131, 251),
-                                foregroundColor: Colors.white,
-                                icon: Icons.edit,
-                                label: '수정',
-                              ),
-                              SlidableAction(
-                                onPressed: (context) {
-                                  _showDeleteEventDialog(
-                                      snapshot.data![index].id!); // 바꿔야 됨
-                                },
-                                backgroundColor:
-                                    const Color.fromARGB(255, 248, 112, 112),
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                                label: '삭제',
-                              ),
-                            ],
-                          ),
-                          child: Card(
-                            margin: const EdgeInsets.all(2), // 카드간의 간격
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0)),
+                      cardWidget = Slidable(
+                        key: ValueKey(index),
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          dismissible: null,
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) {
+                                _showUpdateEventDialog(snapshot.data![index]);
+                              },
+                              backgroundColor:
+                                  const Color.fromARGB(255, 94, 131, 251),
+                              foregroundColor: Colors.white,
+                              icon: Icons.edit,
+                              label: '수정',
+                            ),
+                            SlidableAction(
+                              onPressed: (context) {
+                                _showDeleteEventDialog(
+                                    snapshot.data![index].id!); // 바꿔야 됨
+                              },
+                              backgroundColor:
+                                  const Color.fromARGB(255, 248, 112, 112),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: '삭제',
+                            ),
+                          ],
+                        ),
+                        child: Card(
+                          margin: const EdgeInsets.all(0), // 카드간의 간격
+
+                          // elevation: 0,
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: SizedBox(
-                                        height: 50,
-                                        width: 50,
-                                        child: CircleAvatar(
-                                          backgroundColor:
-                                              snapshot.data![index].inex == "지출"
-                                                  ? const Color.fromARGB(
-                                                      255, 177, 195, 255)
-                                                  : const Color.fromARGB(
-                                                      255, 250, 187, 187),
-                                          child: Text(
-                                            snapshot.data![index].inex == "수입"
-                                                ? "수입"
-                                                : "지출",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.13,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.13,
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        snapshot.data![index].inex == "수입"
+                                            ? const Color.fromARGB(
+                                                255, 250, 187, 187)
+                                            : const Color.fromARGB(
+                                                255, 177, 195, 255),
+                                    child: Text(
+                                      snapshot.data![index].inex == "수입"
+                                          ? '수입'
+                                          : '지출',
+                                      style: const TextStyle(
+                                        color: Colors.white,
                                       ),
                                     ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: 28,
-                                          height: 18,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              border: Border.all(
-                                                color: Colors.grey,
-                                              )),
-                                          child: Center(
-                                            child: Text(
-                                              snapshot.data![index].category,
-                                              style: const TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 10,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          snapshot.data![index].title,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 17,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                ),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.08,
+                                  height: 18,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                      )),
+                                  child: Center(
+                                    child: Text(
+                                      snapshot.data![index].category,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.35,
+                                  child: Text(
+                                    snapshot.data![index].title,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.35,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        snapshot.data![index].income == 0
-                                            ? "-${f.format(snapshot.data![index].expenditure)}원"
-                                            : "+${f.format(snapshot.data![index].income)}원",
+                                        snapshot.data![index].expenditure == 0
+                                            ? "+ ${f.format(snapshot.data![index].income)}원"
+                                            : "- ${f.format(snapshot.data![index].expenditure)}원",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
-                                          color:
-                                              snapshot.data![index].income == 0
-                                                  ? const Color.fromARGB(
-                                                      255, 177, 195, 255)
-                                                  : const Color.fromARGB(
-                                                      255, 250, 187, 187),
+                                          color: snapshot.data![index]
+                                                      .expenditure ==
+                                                  0
+                                              ? const Color.fromARGB(
+                                                  255, 250, 187, 187)
+                                              : const Color.fromARGB(
+                                                  255, 177, 195, 255),
                                         ),
                                       ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        snapshot.data![index].content,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey,
+                                      if (snapshot.data![index].content !=
+                                          "") ...[
+                                        const SizedBox(
+                                          height: 5,
                                         ),
-                                      ),
+                                        Text(
+                                          snapshot.data![index].content,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ]
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
-                      } else {
-                        cardWidget = Slidable(
-                          key: ValueKey(index),
-                          endActionPane: ActionPane(
-                            motion: const ScrollMotion(),
-                            dismissible: null,
-                            children: [
-                              SlidableAction(
-                                onPressed: (context) {
-                                  _showUpdateEventDialog(snapshot.data![index]);
-                                },
-                                backgroundColor:
-                                    const Color.fromARGB(255, 116, 149, 255),
-                                foregroundColor: Colors.white,
-                                icon: Icons.edit,
-                                label: '수정',
-                              ),
-                              SlidableAction(
-                                onPressed: (context) {
-                                  _showDeleteEventDialog(
-                                      snapshot.data![index].id!); // 바꿔야 됨
-                                },
-                                backgroundColor:
-                                    const Color.fromARGB(255, 255, 101, 101),
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                                label: '삭제',
-                              ),
-                            ],
-                          ),
-                          child: Card(
-                            margin: const EdgeInsets.all(0),
-                            elevation: 0, // 카드간의 간격
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: SizedBox(
-                                        height: 50,
-                                        width: 50,
-                                        child: CircleAvatar(
-                                          backgroundColor:
-                                              snapshot.data![index].inex == "지출"
-                                                  ? const Color.fromARGB(
-                                                      255, 177, 195, 255)
-                                                  : const Color.fromARGB(
-                                                      255, 250, 187, 187),
-                                          child: Text(
-                                            snapshot.data![index].inex == "수입"
-                                                ? "수입"
-                                                : "지출",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: 28,
-                                          height: 18,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              border: Border.all(
-                                                color: Colors.grey,
-                                              )),
-                                          child: Center(
-                                            child: Text(
-                                              snapshot.data![index].category,
-                                              style: const TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 10,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          snapshot.data![index].title,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 17,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Text(
-                                    snapshot.data![index].income == 0
-                                        ? "-${f.format(snapshot.data![index].expenditure)}원"
-                                        : "+${f.format(snapshot.data![index].income)}원",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: snapshot.data![index].income == 0
-                                          ? const Color.fromARGB(
-                                              255, 177, 195, 255)
-                                          : const Color.fromARGB(
-                                              255, 250, 187, 187),
-                                    ),
-                                  ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.02,
                                 ),
                               ],
                             ),
                           ),
-                        );
-                      }
+                        ),
+                      );
 
                       // 일별이 들어갈 텍스트 위젯
                       late Text day;
@@ -809,13 +706,13 @@ class _CalendarPage2State extends State<CalendarPage2> {
                       ],
                     ),
                     TextField(
-                      maxLength: 10,
+                      maxLength: 8,
                       controller: titleController,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(labelText: "제목"),
                     ),
                     TextField(
-                      maxLength: 9,
+                      maxLength: 8,
                       controller: amountController,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(labelText: "금액"),
@@ -823,7 +720,7 @@ class _CalendarPage2State extends State<CalendarPage2> {
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                     TextField(
-                      maxLength: 10, // 글자수 제한
+                      maxLength: 8, // 글자수 제한
                       controller: contentController,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(labelText: "메모"),

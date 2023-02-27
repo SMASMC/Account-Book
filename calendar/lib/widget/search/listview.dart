@@ -71,111 +71,225 @@ class _SearchListViewState extends State<SearchListView> {
                       height: 89,
                       child: Card(
                         margin: const EdgeInsets.all(0), // 카드간의 간격
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0.0)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: SizedBox(
-                                    height: 50,
-                                    width: 50,
-                                    child: CircleAvatar(
-                                      backgroundColor:
-                                          snapshot.data![index].inex == "지출"
-                                              ? const Color.fromARGB(
-                                                  255, 177, 195, 255)
-                                              : const Color.fromARGB(
-                                                  255, 250, 187, 187),
-                                      child: Text(
-                                        snapshot.data![index].inex == "수입"
-                                            ? "수입"
-                                            : "지출",
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
+
+                        // elevation: 0,
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.02,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.13,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.13,
+                                child: CircleAvatar(
+                                  backgroundColor: snapshot.data![index].inex ==
+                                          "수입"
+                                      ? const Color.fromARGB(255, 250, 187, 187)
+                                      : const Color.fromARGB(
+                                          255, 177, 195, 255),
+                                  child: Text(
+                                    snapshot.data![index].inex == "수입"
+                                        ? '수입'
+                                        : '지출',
+                                    style: const TextStyle(
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
-                                Row(
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.02,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.08,
+                                height: 18,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                    )),
+                                child: Center(
+                                  child: Text(
+                                    snapshot.data![index].category,
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.02,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.35,
+                                child: Text(
+                                  snapshot.data![index].title,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.01,
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.35,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Container(
-                                      width: 28,
-                                      height: 18,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          border: Border.all(
-                                            color: Colors.grey,
-                                          )),
-                                      child: Center(
-                                        child: Text(
-                                          snapshot.data![index].category,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
                                     Text(
-                                      snapshot.data![index].title,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    snapshot.data![index].income == 0
-                                        // '${f.format(foodListModel.price)}원',
-                                        ? "-${f.format(snapshot.data![index].expenditure)}원"
-                                        : "+${f.format(snapshot.data![index].income)}원",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: snapshot.data![index].income == 0
-                                          ? const Color.fromARGB(
-                                              255, 177, 195, 255)
-                                          : const Color.fromARGB(
-                                              255, 250, 187, 187),
-                                    ),
-                                  ),
-                                  if (snapshot.data![index].content != "")
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                  if (snapshot.data![index].content != "")
-                                    Text(
-                                      snapshot.data![index].content,
-                                      style: const TextStyle(
+                                      snapshot.data![index].expenditure == 0
+                                          ? "+ ${f.format(snapshot.data![index].income)}원"
+                                          : "- ${f.format(snapshot.data![index].expenditure)}원",
+                                      style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.grey,
+                                        color:
+                                            snapshot.data![index].expenditure ==
+                                                    0
+                                                ? const Color.fromARGB(
+                                                    255, 250, 187, 187)
+                                                : const Color.fromARGB(
+                                                    255, 177, 195, 255),
                                       ),
                                     ),
-                                ],
+                                    if (snapshot.data![index].content !=
+                                        "") ...[
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        snapshot.data![index].content,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ]
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.02,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+                      // Card(
+                      //   margin: const EdgeInsets.all(6.0), // 카드간의 간격
+                      //   shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(0.0)),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Row(
+                      //         children: [
+                      //           Padding(
+                      //             padding: const EdgeInsets.all(10.0),
+                      //             child: SizedBox(
+                      //               height: 50,
+                      //               width: 50,
+                      //               child: CircleAvatar(
+                      //                 backgroundColor:
+                      //                     snapshot.data![index].inex == "지출"
+                      //                         ? const Color.fromARGB(
+                      //                             255, 177, 195, 255)
+                      //                         : const Color.fromARGB(
+                      //                             255, 250, 187, 187),
+                      //                 child: Text(
+                      //                   snapshot.data![index].inex == "수입"
+                      //                       ? "수입"
+                      //                       : "지출",
+                      //                   style: const TextStyle(
+                      //                     color: Colors.white,
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           Row(
+                      //             children: [
+                      //               Container(
+                      //                 width: 28,
+                      //                 height: 18,
+                      //                 decoration: BoxDecoration(
+                      //                     borderRadius:
+                      //                         BorderRadius.circular(30),
+                      //                     border: Border.all(
+                      //                       color: Colors.grey,
+                      //                     )),
+                      //                 child: Center(
+                      //                   child: Text(
+                      //                     snapshot.data![index].category,
+                      //                     style: const TextStyle(
+                      //                       color: Colors.grey,
+                      //                       fontSize: 10,
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               const SizedBox(
+                      //                 width: 10,
+                      //               ),
+                      //               Text(
+                      //                 snapshot.data![index].title,
+                      //                 style: const TextStyle(
+                      //                   fontWeight: FontWeight.bold,
+                      //                   fontSize: 15,
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ],
+                      //       ),
+                      //       Padding(
+                      //         padding: const EdgeInsets.all(16.0),
+                      //         child: Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.end,
+                      //           mainAxisAlignment: MainAxisAlignment.center,
+                      //           children: [
+                      //             Text(
+                      //               snapshot.data![index].income == 0
+                      //                   // '${f.format(foodListModel.price)}원',
+                      //                   ? "-${f.format(snapshot.data![index].expenditure)}원"
+                      //                   : "+${f.format(snapshot.data![index].income)}원",
+                      //               style: TextStyle(
+                      //                 fontSize: 16,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color: snapshot.data![index].income == 0
+                      //                     ? const Color.fromARGB(
+                      //                         255, 177, 195, 255)
+                      //                     : const Color.fromARGB(
+                      //                         255, 250, 187, 187),
+                      //               ),
+                      //             ),
+                      //             if (snapshot.data![index].content != "")
+                      //               const SizedBox(
+                      //                 height: 5,
+                      //               ),
+                      //             if (snapshot.data![index].content != "")
+                      //               Text(
+                      //                 snapshot.data![index].content,
+                      //                 style: const TextStyle(
+                      //                   fontSize: 12,
+                      //                   fontWeight: FontWeight.bold,
+                      //                   color: Colors.grey,
+                      //                 ),
+                      //               ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ),
                   ],
                 );
