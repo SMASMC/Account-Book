@@ -31,7 +31,14 @@ class _ClistState extends State<Clist> {
   // -----------------------------------------------
   // 날짜 변할 때 마다 새로운 리스트 가져오는 함수
   myList(String day) async {
+    list = [];
     DatabaseHandler handler = DatabaseHandler();
+
+    var ls = await handler.querySelectDate();
+
+    if (ls.isEmpty) {
+      await handler.sampleInsert();
+    }
 
     handler.queryYear(day).then((value) {
       setState(() {
@@ -57,21 +64,37 @@ class _ClistState extends State<Clist> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.02,
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.13,
-                    height: MediaQuery.of(context).size.width * 0.13,
-                    child: CircleAvatar(
-                      backgroundColor: list[index].inex == "수입"
-                          ? const Color.fromARGB(255, 250, 187, 187)
-                          : const Color.fromARGB(255, 177, 195, 255),
-                      child: Text(
-                        list[index].inex == "수입" ? '수입' : '지출',
-                        style: const TextStyle(
-                          color: Colors.white,
+                  if (list[index].inex == '샘플') ...[
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.13,
+                      height: MediaQuery.of(context).size.width * 0.13,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.orange,
+                        child: Text(
+                          list[index].inex,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ] else ...[
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.13,
+                      height: MediaQuery.of(context).size.width * 0.13,
+                      child: CircleAvatar(
+                        backgroundColor: list[index].inex == "수입"
+                            ? const Color.fromARGB(255, 250, 187, 187)
+                            : const Color.fromARGB(255, 177, 195, 255),
+                        child: Text(
+                          list[index].inex == "수입" ? '수입' : '지출',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.02,
                   ),
@@ -150,88 +173,6 @@ class _ClistState extends State<Clist> {
               ),
             ),
           );
-          // : Card(
-          //     margin: const EdgeInsets.all(0), // 카드간의 간격
-          //     elevation: 0,
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         Padding(
-          //           padding: const EdgeInsets.all(10),
-          //           child: Row(
-          //             children: [
-          //               SizedBox(
-          //                 height: 50,
-          //                 width: 50,
-          //                 child: CircleAvatar(
-          //                   backgroundColor: list[index].inex == "수입"
-          //                       ? const Color.fromARGB(255, 250, 187, 187)
-          //                       : const Color.fromARGB(255, 177, 195, 255),
-          //                   child: Text(
-          //                     list[index].inex == "수입" ? '수입' : '지출',
-          //                     style: const TextStyle(
-          //                       color: Colors.white,
-          //                     ),
-          //                   ),
-          //                 ),
-          //               ),
-          //               const SizedBox(
-          //                 width: 20,
-          //               ),
-          //               Row(
-          //                 crossAxisAlignment: CrossAxisAlignment.start,
-          //                 children: [
-          //                   Container(
-          //                     width: 28,
-          //                     height: 18,
-          //                     decoration: BoxDecoration(
-          //                         borderRadius: BorderRadius.circular(30),
-          //                         border: Border.all(
-          //                           color: Colors.grey,
-          //                         )),
-          //                     child: Center(
-          //                       child: Text(
-          //                         list[index].category,
-          //                         style: const TextStyle(
-          //                           color: Colors.grey,
-          //                           fontSize: 10,
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   ),
-          //                   const SizedBox(
-          //                     width: 10,
-          //                   ),
-          //                   Text(
-          //                     list[index].title,
-          //                     style: const TextStyle(
-          //                       fontWeight: FontWeight.bold,
-          //                       fontSize: 15,
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //         Padding(
-          //           padding: const EdgeInsets.all(16),
-          //           child: Text(
-          //             list[index].expenditure == 0
-          //                 ? "+ ${f.format(list[index].income)}원"
-          //                 : "- ${f.format(list[index].expenditure)}원",
-          //             style: TextStyle(
-          //               fontSize: 16,
-          //               fontWeight: FontWeight.bold,
-          //               color: list[index].expenditure == 0
-          //                   ? const Color.fromARGB(255, 250, 187, 187)
-          //                   : const Color.fromARGB(255, 177, 195, 255),
-          //             ),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   );
         });
   }
 }

@@ -127,14 +127,27 @@ class DatabaseHandler {
     result = await db.rawInsert(
         "insert into calendar (title, inex, income, expenditure, content, writeday,category) values(?,?,?,?,?,?,?)",
         [
-          '샘플',
+          '+버튼으로 추가하기',
           '샘플',
           0,
           0,
-          '샘플',
+          '',
           '${DateTime.now().year}-$month-$day',
           '기타',
         ]);
+    return result;
+  }
+
+  Future<int> deleteSample() async {
+    int result = 0;
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult =
+        await db.rawQuery('select * from calendar where inex == ?', ['샘플']);
+    if (queryResult.isNotEmpty) {
+      var id = queryResult[0]['id'];
+      result = await db.delete("calendar", where: "id = ?", whereArgs: [id]);
+    }
+
     return result;
   }
 }

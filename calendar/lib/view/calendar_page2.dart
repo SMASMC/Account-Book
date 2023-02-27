@@ -85,6 +85,7 @@ class _CalendarPage2State extends State<CalendarPage2> {
     ];
 
     endController.text = '${year[1]}-${month[1]}-${day[1]}';
+    startController.text = '2000-01-01';
 
     calList = handler.querySelectDate();
 
@@ -189,8 +190,7 @@ class _CalendarPage2State extends State<CalendarPage2> {
                   onPressed: () {
                     setState(() {
                       calList = handler.querySpecificDate(
-                          '${year[0]}-${month[0]}-${day[0]}',
-                          '${year[1]}-${month[1]}-${day[1]}');
+                          startController.text, endController.text);
                     });
                   },
                   child: const Text(
@@ -214,6 +214,16 @@ class _CalendarPage2State extends State<CalendarPage2> {
                   onPressed: () {
                     setState(() {
                       calList = handler.querySelectDate();
+
+                      startController.text = '2000-01-01';
+                      var year = _dateTime.year.toString();
+                      var month = _dateTime.month < 10
+                          ? '0${_dateTime.month}'
+                          : _dateTime.month.toString();
+                      var day = _dateTime.day < 10
+                          ? '0${_dateTime.day}'
+                          : _dateTime.day.toString();
+                      endController.text = '$year-$month-$day';
                     });
                   },
                   child: const Text(
@@ -249,41 +259,167 @@ class _CalendarPage2State extends State<CalendarPage2> {
                   return ListView.builder(
                     itemCount: snapshot.data?.length,
                     itemBuilder: (BuildContext context, int index) {
-                      late Slidable cardWidget;
+                      late Widget cardWidget;
 
-                      // query에서 불러온 결과 중에 내용이 들어있을 경우와 아닐경우에 각각 맞는 card를 만들기 위해서
-                      cardWidget = Slidable(
-                        key: ValueKey(index),
-                        endActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          dismissible: null,
-                          children: [
-                            SlidableAction(
-                              onPressed: (context) {
-                                _showUpdateEventDialog(snapshot.data![index]);
-                              },
-                              backgroundColor:
-                                  const Color.fromARGB(255, 94, 131, 251),
-                              foregroundColor: Colors.white,
-                              icon: Icons.edit,
-                              label: '수정',
+                      if (snapshot.data![index].inex != '샘플') {
+                        cardWidget = Slidable(
+                          key: ValueKey(index),
+                          endActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            dismissible: null,
+                            children: [
+                              SlidableAction(
+                                onPressed: (context) {
+                                  _showUpdateEventDialog(snapshot.data![index]);
+                                },
+                                backgroundColor:
+                                    const Color.fromARGB(255, 94, 131, 251),
+                                foregroundColor: Colors.white,
+                                icon: Icons.edit,
+                                label: '수정',
+                              ),
+                              SlidableAction(
+                                onPressed: (context) {
+                                  _showDeleteEventDialog(
+                                      snapshot.data![index].id!); // 바꿔야 됨
+                                },
+                                backgroundColor:
+                                    const Color.fromARGB(255, 248, 112, 112),
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: '삭제',
+                              ),
+                            ],
+                          ),
+                          child: Card(
+                            margin: const EdgeInsets.all(0), // 카드간의 간격
+                            // elevation: 0,
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.02,
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.13,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.13,
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          snapshot.data![index].inex == "수입"
+                                              ? const Color.fromARGB(
+                                                  255, 250, 187, 187)
+                                              : const Color.fromARGB(
+                                                  255, 177, 195, 255),
+                                      child: Text(
+                                        snapshot.data![index].inex == "수입"
+                                            ? '수입'
+                                            : '지출',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.02,
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.08,
+                                    height: 18,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        border: Border.all(
+                                          color: Colors.grey,
+                                        )),
+                                    child: Center(
+                                      child: Text(
+                                        snapshot.data![index].category,
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.02,
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.35,
+                                    child: Text(
+                                      snapshot.data![index].title,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.01,
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.35,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          snapshot.data![index].expenditure == 0
+                                              ? "+ ${f.format(snapshot.data![index].income)}원"
+                                              : "- ${f.format(snapshot.data![index].expenditure)}원",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: snapshot.data![index]
+                                                        .expenditure ==
+                                                    0
+                                                ? const Color.fromARGB(
+                                                    255, 250, 187, 187)
+                                                : const Color.fromARGB(
+                                                    255, 177, 195, 255),
+                                          ),
+                                        ),
+                                        if (snapshot.data![index].content !=
+                                            "") ...[
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            snapshot.data![index].content,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ]
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.02,
+                                  ),
+                                ],
+                              ),
                             ),
-                            SlidableAction(
-                              onPressed: (context) {
-                                _showDeleteEventDialog(
-                                    snapshot.data![index].id!); // 바꿔야 됨
-                              },
-                              backgroundColor:
-                                  const Color.fromARGB(255, 248, 112, 112),
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: '삭제',
-                            ),
-                          ],
-                        ),
-                        child: Card(
+                          ),
+                        );
+                      } else {
+                        cardWidget = Card(
                           margin: const EdgeInsets.all(0), // 카드간의 간격
-
                           // elevation: 0,
                           child: SizedBox(
                             height: MediaQuery.of(context).size.height * 0.1,
@@ -299,16 +435,9 @@ class _CalendarPage2State extends State<CalendarPage2> {
                                   height:
                                       MediaQuery.of(context).size.width * 0.13,
                                   child: CircleAvatar(
-                                    backgroundColor:
-                                        snapshot.data![index].inex == "수입"
-                                            ? const Color.fromARGB(
-                                                255, 250, 187, 187)
-                                            : const Color.fromARGB(
-                                                255, 177, 195, 255),
+                                    backgroundColor: Colors.orange,
                                     child: Text(
-                                      snapshot.data![index].inex == "수입"
-                                          ? '수입'
-                                          : '지출',
+                                      snapshot.data![index].inex,
                                       style: const TextStyle(
                                         color: Colors.white,
                                       ),
@@ -404,8 +533,10 @@ class _CalendarPage2State extends State<CalendarPage2> {
                               ],
                             ),
                           ),
-                        ),
-                      );
+                        );
+                      }
+
+                      // query에서 불러온 결과 중에 내용이 들어있을 경우와 아닐경우에 각각 맞는 card를 만들기 위해서
 
                       // 일별이 들어갈 텍스트 위젯
                       late Text day;

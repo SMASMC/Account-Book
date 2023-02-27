@@ -185,14 +185,13 @@ class _AddFloatingButtonState extends State<AddFloatingButton> {
                         ),
                       );
                     } else {
-                      addCal();
-                      widget.controller.add(_selectedDate);
+                      addCal().then(
+                          (value) => widget.controller.add(_selectedDate));
 
                       titleController.clear();
                       amountController.clear();
                       contentController.clear();
-                      Navigator.pop(context);
-                      return;
+                      Navigator.of(context).pop();
                     }
                   },
                   child: const Text("Ok"),
@@ -229,6 +228,10 @@ class _AddFloatingButtonState extends State<AddFloatingButton> {
         category: _selectedList);
 
     await handler.insertCal(addCal);
+
+    // 샘플이 있으면 샘플 지우기
+    await handler.deleteSample();
+
     return 0;
   }
 }
