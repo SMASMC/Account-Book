@@ -30,8 +30,9 @@ class _ClistState extends State<Clist> {
 
   // -----------------------------------------------
   // 날짜 변할 때 마다 새로운 리스트 가져오는 함수
-  myList(String day) {
+  myList(String day) async {
     DatabaseHandler handler = DatabaseHandler();
+
     handler.queryYear(day).then((value) {
       setState(() {
         list = value;
@@ -48,7 +49,6 @@ class _ClistState extends State<Clist> {
         itemBuilder: (BuildContext context, int index) {
           return Card(
             margin: const EdgeInsets.all(0), // 카드간의 간격
-
             // elevation: 0,
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,

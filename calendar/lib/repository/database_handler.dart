@@ -114,4 +114,27 @@ class DatabaseHandler {
         [searchText, searchBtn]); //셀렉트 때문에 ap<String, Object?> toMap()만듬
     return queryResult.map((e) => Calendar.fromMap(e)).toList();
   }
+
+  Future<int> sampleInsert() async {
+    //파일쓰는거라 async 사용
+    int result = 0;
+    final Database db = await initializeDB(); //그런애있냐 하고 이니셜라이징하고
+    var month = DateTime.now().month < 10
+        ? '0${DateTime.now().month}'
+        : DateTime.now().month;
+    var day =
+        DateTime.now().day < 10 ? '0${DateTime.now().day}' : DateTime.now().day;
+    result = await db.rawInsert(
+        "insert into calendar (title, inex, income, expenditure, content, writeday,category) values(?,?,?,?,?,?,?)",
+        [
+          '샘플',
+          '샘플',
+          0,
+          0,
+          '샘플',
+          '${DateTime.now().year}-$month-$day',
+          '기타',
+        ]);
+    return result;
+  }
 }
