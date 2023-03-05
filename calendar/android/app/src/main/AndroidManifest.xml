@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pj_test">
    <application
-        android:label="가계부"
+        android:label="가계부자"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
